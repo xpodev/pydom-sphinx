@@ -1,9 +1,0 @@
-{
-  "python.terminal.activateEnvironment": true,
-  "python.analysis.extraPaths": [
-    "D:/pydom/src"
-  ],
-  "cSpell.words": [
-    "pydom"
-  ]
-}
