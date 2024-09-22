@@ -1,0 +1,27 @@
+/* Firefox */
+* {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #888 transparent; /* For Firefox */
+}
+
+*:hover {
+  scrollbar-color: #4d91ea transparent; /* For Firefox */
+}
+
+/* WebKit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust as needed */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px; /* Optional, for rounded scrollbars */
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: #4d91ea;
+}

@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "dev": ".venv/Scripts/python.exe -m uvicorn --app-dir ./src main:app --reload --port 8082",
+    "build": "set OPENAPI_URL= && .venv/Scripts/python.exe src/build.py",
+    "sphinx": "sphinx-autobuild -a -b pydom docs build --host 0.0.0.0 --port 8082"
+  }
+}
