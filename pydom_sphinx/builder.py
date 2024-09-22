@@ -67,6 +67,6 @@ class PyDOMBuilder(Builder):
         except ImportError:
             pass
 
-        module = module or importlib.import_module(f"pydom_theme.templates.{name}")
+        module = module or importlib.import_module(f"pydom_sphinx.templates.{name}")
 
         return getattr(module, TEMPLATE_COMPONENTS[name])
