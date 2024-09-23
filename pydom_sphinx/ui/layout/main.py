@@ -1,4 +1,4 @@
-from pydom import Component, Div
+from pydom import Component, Div, Img
 
 
 class MainLayout(Component):
@@ -10,7 +10,9 @@ class MainLayout(Component):
             Div(class_name="py-4 bg-primary")(
                 Div(class_name="container mx-auto")(
                     Div(class_name="d-flex justify-content-between")(
-                        Div()("{% Logo %}"),
+                        Div()(
+                            Img(src="https://via.placeholder.com/150x30", class_name="rounded")
+                        ),
                         Div()("Menu"),
                     )
                 )

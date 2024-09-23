@@ -17,3 +17,16 @@ Key features of Seamless include:
 - **Familiarity**: Seamless is designed to be familiar to web developers, with a syntax that is similar to React.
 - **Extensibility**: Seamless is built on top of `PyDOM <https://github.com/xpodev/pydom>`_, a powerful and flexible
   library for creating and manipulating HTML elements in Python.
+
+
+.. code-block:: python
+
+    from seamless import App, html
+
+    app = App()
+
+    @app.route('/')
+    def home():
+        return html.h1('Hello, world!')
+
+    app.run()

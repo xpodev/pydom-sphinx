@@ -1,5 +1,6 @@
-from pydom import Component, P
+from pydom import P
+from pydom_sphinx import Component
 
 class Paragraph(Component):
     def render(self):
-        return P(class_name="card p-2")(*self.children)
+        return P()(*self.children)

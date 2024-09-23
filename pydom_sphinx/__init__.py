@@ -6,6 +6,7 @@ sys.path.append(str(Path(__file__).parent))
 from sphinx.application import Sphinx
 
 from builder import PyDOMBuilder
+from ui.components.sphinx_component import SphinxComponent as Component
 
 
 def setup(app: Sphinx):

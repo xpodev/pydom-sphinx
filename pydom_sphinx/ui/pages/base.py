@@ -5,8 +5,9 @@ from ui.layout.main import MainLayout
 
 
 class Page(Base, title="PyDOM Documentation"):
-    def __init__(self, *children, title=None):
+    def __init__(self, *children, title=None, **kwargs):
         super().__init__(*children)
+        self.kwargs = kwargs
         self.title = title
         self._html_props["data-bs-theme"] = "dark" # type: ignore - data-bs-theme is a valid attribute
 
@@ -38,4 +39,4 @@ class Page(Base, title="PyDOM Documentation"):
         )
 
     def body(self):
-        return (MainLayout()(*self.children),)
+        return (MainLayout()(*self.children), Script("hljs.highlightAll();"))

@@ -1,15 +1,11 @@
 import importlib
 import importlib.util
 
-from docutils.nodes import document, Node, Element
+from docutils.nodes import document, Node
 from sphinx.builders import Builder
-
 from pydom import Component, Fragment, render
 
-TEMPLATE_COMPONENTS = {
-    "paragraph": "Paragraph",
-    "document": "Document",
-}
+from templates_components import TEMPLATE_COMPONENTS
 
 
 class PyDOMBuilder(Builder):
@@ -17,7 +13,8 @@ class PyDOMBuilder(Builder):
 
     def init(self):
         self.components = {
-            name: self._import_template(name) for name in TEMPLATE_COMPONENTS.keys()
+            name: self._import_template(template)
+            for name, template in TEMPLATE_COMPONENTS.items()
         }
 
     def prepare_writing(self, docnames: set[str]) -> None:
@@ -46,27 +43,28 @@ class PyDOMBuilder(Builder):
         if not children:
             return node.astext()
 
-        component = self.components.get(node.tagname, Fragment) # type: ignore
-        return component(*children)
+        component = self.components.get(node.tagname, Fragment)  # type: ignore
+        return component(*children, **node.attributes)  # type: ignore
 
     def get_outfilename(self, pagename: str):
         return self.outdir / f"{pagename}.html"
 
-    def _import_template(self, name: str) -> Component:
+    def _import_template(self, template: tuple[str, str]) -> Component:
         module = None
+        file, name = template
         try:
             for path in self.config.templates_path:
-                module_path = self.confdir / path / f"{name}.py"
+                module_path = self.confdir / path / f"{file}.py"
                 if not module_path.exists():
                     continue
-                spec = importlib.util.spec_from_file_location(name, module_path)
+                spec = importlib.util.spec_from_file_location(file, module_path)
                 if spec is None:
                     raise ImportError
                 module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module) # type: ignore
+                spec.loader.exec_module(module)  # type: ignore
         except ImportError:
             pass
 
-        module = module or importlib.import_module(f"pydom_sphinx.templates.{name}")
+        module = module or importlib.import_module(f"pydom_sphinx.templates.{file}")
 
-        return getattr(module, TEMPLATE_COMPONENTS[name])
+        return getattr(module, name)
