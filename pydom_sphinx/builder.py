@@ -43,7 +43,7 @@ class PyDOMBuilder(Builder):
         if not children:
             return node.astext()
 
-        component = self.components.get(node.tagname, Fragment)  # type: ignore
+        component = self.components.get(type(node), Fragment)  # type: ignore
         return component(*children, **node.attributes)  # type: ignore
 
     def get_outfilename(self, pagename: str):
