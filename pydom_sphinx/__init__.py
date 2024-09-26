@@ -16,3 +16,6 @@ def setup(app: Sphinx):
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
+
+
+__all__ = ["Component", "setup"]

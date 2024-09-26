@@ -1,3 +1,4 @@
+from codecs import ascii_encode
 import importlib
 import importlib.util
 
@@ -13,8 +14,8 @@ class PyDOMBuilder(Builder):
 
     def init(self):
         self.components = {
-            name: self._import_template(template)
-            for name, template in TEMPLATE_COMPONENTS.items()
+            node_type: self._import_template(*template)
+            for node_type, template in TEMPLATE_COMPONENTS.items()
         }
 
     def prepare_writing(self, docnames: set[str]) -> None:
@@ -49,22 +50,18 @@ class PyDOMBuilder(Builder):
     def get_outfilename(self, pagename: str):
         return self.outdir / f"{pagename}.html"
 
-    def _import_template(self, template: tuple[str, str]) -> Component:
+    def _import_template(self, template_file: str, component_name: str) -> Component:
         module = None
-        file, name = template
-        try:
-            for path in self.config.templates_path:
-                module_path = self.confdir / path / f"{file}.py"
-                if not module_path.exists():
-                    continue
-                spec = importlib.util.spec_from_file_location(file, module_path)
-                if spec is None:
-                    raise ImportError
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)  # type: ignore
-        except ImportError:
-            pass
+        for path in self.config.templates_path:
+            module_path = self.confdir / path / f"{template_file}.py"
+            if module_path.exists():
+                spec = importlib.util.spec_from_file_location(template_file, module_path)
+                if spec and spec.loader:
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    break
 
-        module = module or importlib.import_module(f"pydom_sphinx.templates.{file}")
+        if not module:
+            module = importlib.import_module(f"pydom_sphinx.templates.{template_file}")
 
-        return getattr(module, name)
+        return getattr(module, component_name)
